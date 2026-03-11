@@ -1,20 +1,19 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X, Home, ShoppingBag, Search, MapPin, User, GraduationCap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-
-const navLinks = [
-  { to: "/dashboard", label: "Home", icon: Home },
-  { to: "/marketplace", label: "Marketplace", icon: ShoppingBag },
-  { to: "/lost-found", label: "Lost & Found", icon: Search },
-  { to: "/study-spaces", label: "Study Spaces", icon: MapPin },
-  { to: "/profile", label: "Profile", icon: User },
-];
+import { supabase } from "@/lib/supabase";
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
-  const location = useLocation();
+  const navLinks = [
+    { to: "/dashboard", label: "Home", icon: Home },
+    { to: "/marketplace", label: "Marketplace", icon: ShoppingBag },
+    { to: "/lost-found", label: "Lost & Found", icon: Search },
+    { to: "/study-spaces", label: "Study Spaces", icon: MapPin },
+    { to: "/profile", label: "Profile", icon: User },
+  ];
 
   return (
     <nav className="sticky top-0 z-50 w-full border-b border-border bg-card/95 backdrop-blur-md">
@@ -38,7 +37,7 @@ export function Navbar() {
                   key={link.to}
                   to={link.to}
                   className={cn(
-                    "flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200",
+                    "relative flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200",
                     isActive
                       ? "bg-primary text-primary-foreground"
                       : "text-muted-foreground hover:text-foreground hover:bg-muted"
@@ -75,7 +74,7 @@ export function Navbar() {
                     to={link.to}
                     onClick={() => setIsOpen(false)}
                     className={cn(
-                      "flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200",
+                      "relative flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200",
                       isActive
                         ? "bg-primary text-primary-foreground"
                         : "text-muted-foreground hover:text-foreground hover:bg-muted"

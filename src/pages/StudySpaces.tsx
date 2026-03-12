@@ -312,7 +312,7 @@ export default function StudySpaces() {
           <div className="space-y-1">
             <h1 className="text-2xl sm:text-4xl font-black text-slate-900 tracking-tighter flex items-center gap-3">
               <MapIcon className="w-6 h-6 sm:w-8 sm:h-8 text-blue-600" />
-              LRC Grand Floor
+              LRC Ground Floor
             </h1>
             <p className="text-slate-400 font-medium text-xs sm:text-sm">Level 2 • North Wing Seating</p>
           </div>

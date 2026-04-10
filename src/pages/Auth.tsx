@@ -25,7 +25,13 @@ export default function Auth() {
   useEffect(() => {
     const checkUser = async () => {
       const { data } = await supabase.auth.getSession();
-      if (data?.session) navigate("/dashboard");
+      if (data?.session) {
+        if (data.session.user.email === "admin@campusconnect.com") {
+          navigate("/admin");
+        } else {
+          navigate("/dashboard");
+        }
+      }
     };
     checkUser();
   }, [navigate]);
@@ -68,7 +74,11 @@ export default function Auth() {
         }
 
         toast({ title: "Welcome back!", description: "Signed in successfully." });
-        navigate("/dashboard");
+        if (email === "admin@campusconnect.com") {
+          navigate("/admin");
+        } else {
+          navigate("/dashboard");
+        }
       } else {
         // SIGN UP PIPELINE
         const { data, error } = await supabase.auth.signUp({

@@ -52,6 +52,14 @@ create policy "Users can update their own marketplace items." on marketplace_ite
 create policy "Users can delete their own marketplace items." on marketplace_items
   for delete using (auth.uid() = seller_id);
 
+create policy "Admins can delete any marketplace item." on marketplace_items
+  for delete using (
+    exists (
+      select 1 from profiles
+      where profiles.id = auth.uid() and profiles.email = 'admin@campusconnect.com'
+    )
+  );
+
 
 -- Create a table for Lost and Found Items
 create table lost_found_items (
@@ -78,6 +86,17 @@ create policy "Users can report lost/found items." on lost_found_items
 
 create policy "Users can update their own reports." on lost_found_items
   for update using (auth.uid() = reporter_id);
+
+create policy "Users can delete their own reports." on lost_found_items
+  for delete using (auth.uid() = reporter_id);
+
+create policy "Admins can delete any lost/found item." on lost_found_items
+  for delete using (
+    exists (
+      select 1 from profiles
+      where profiles.id = auth.uid() and profiles.email = 'admin@campusconnect.com'
+    )
+  );
 
 
 -- Create a table for Study Spaces (LRC Seats)

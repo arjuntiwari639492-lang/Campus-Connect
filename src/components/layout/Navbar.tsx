@@ -1,18 +1,39 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X, Home, ShoppingBag, Search, MapPin, User, GraduationCap } from "lucide-react";
+import { Menu, X, Home, ShoppingBag, Search, MapPin, User, GraduationCap, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/lib/supabase";
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      if (user?.email === "admin@campusconnect.com") {
+        setIsAdmin(true);
+      }
+    });
+
+    const { data: authListener } = supabase.auth.onAuthStateChange(
+      (event, session) => {
+        setIsAdmin(session?.user?.email === "admin@campusconnect.com");
+      }
+    );
+
+    return () => {
+      authListener.subscription.unsubscribe();
+    };
+  }, []);
+
   const navLinks = [
     { to: "/dashboard", label: "Home", icon: Home },
     { to: "/marketplace", label: "Marketplace", icon: ShoppingBag },
     { to: "/lost-found", label: "Lost & Found", icon: Search },
     { to: "/study-spaces", label: "Study Spaces", icon: MapPin },
     { to: "/profile", label: "Profile", icon: User },
+    ...(isAdmin ? [{ to: "/admin", label: "Admin", icon: Shield }] : []),
   ];
 
   return (
